@@ -17,7 +17,6 @@ function Category() {
     const [modal, setModal] = useState(false);
     const [isOpen, setIsOpen] = useState(true)
     const [enabled, setEnabled] = useState(false)
-    const navigate = useNavigate()
     async function getCategories() {
         await axios.get('http://localhost:9000/category').then(res => { setCategory(res.data) }).catch(e => console.log(e))
     }
