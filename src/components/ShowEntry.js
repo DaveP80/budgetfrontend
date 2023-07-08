@@ -1,5 +1,5 @@
-import axios from 'axios'
 import React from 'react'
+import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +12,8 @@ function ShowEntry() {
     useEffect(() => { getInfo() }, [])
 
     async function getInfo() {
-        await axios.get(`http://localhost:9000/transactions/${id}`).then(res => setInfo({ ...res.data })).catch(e => console.log(e))
+        await axios.get(`http://localhost:9000/transactions/${id}`).then(res => {if (!res.data.hasOwnProperty('id')) navigate('/notfound');
+        setInfo({ ...res.data })}).catch(e => console.log(e))
     }
 
     async function handleDelete() {

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React from 'react'
 import { useState, useEffect, Fragment } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import { Dialog, Transition, Switch } from '@headlessui/react'
 
@@ -40,7 +39,7 @@ function Category() {
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
-        let forminfo = Array.from([input1, input2, input3])
+        let forminfo = Array.from([input1.toLowerCase(), input2.toLowerCase(), input3.toLowerCase()])
         if (forminfo.every(item => item === '')) return
         if (forminfo.some(item => category.includes(item))) {
             alert('duplicate category')
@@ -64,7 +63,7 @@ function Category() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             {
-                entry.length || enabled ? <div className='py-4'>
+                entry.length && enabled ? <div className='py-4'>
                     <Link
                         to="/transactions"
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
@@ -73,6 +72,9 @@ function Category() {
                     <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-2 text-m font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
                         Get started with a new budget
                     </span>
+            }
+            {
+                modal &&  
             }
             <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
                 <div className="px-6 py-4">

@@ -6,6 +6,7 @@ import Category from './components/Category';
 import EditEntry from './components/EditEntry';
 import MakeEntry from './components/MakeEntry';
 import ShowEntry from './components/ShowEntry';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
         <Route path='/transactions/new' element={<MakeEntry />}/>
         <Route path='/transactions/:id/edit' element={<EditEntry />}/>
         <Route path='/transactions/category' element={<Category />}/>
+        <Route path='/notfound' element={<ErrorPage />}/>
+        <Route path='*' element={<ErrorPage />}/>
       </Routes>
     </Router>
 

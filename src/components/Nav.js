@@ -14,7 +14,7 @@ function Nav() {
             <header className="absolute inset-x-0 top-0 z-50 bg-purple-500">
                 <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
-                            <span className="sr-only">Your Company</span>
+                            <span className="sr-only">Budget</span>
                             <img
                                 className="h-8 w-auto"
                                 src={piggy}

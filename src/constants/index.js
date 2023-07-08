@@ -10,6 +10,6 @@ export const navLinks = [
     },
     {
       id: "transactions/new",
-      title: "Add a Transaction"
+      title: "Add Transactions"
     }
   ];
