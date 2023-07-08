@@ -7,6 +7,7 @@ import EditEntry from './components/EditEntry';
 import MakeEntry from './components/MakeEntry';
 import ShowEntry from './components/ShowEntry';
 import ErrorPage from './components/ErrorPage';
+import InvalidReq from './components/InvalidReq';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/transactions/:id/edit' element={<EditEntry />}/>
         <Route path='/transactions/category' element={<Category />}/>
         <Route path='/notfound' element={<ErrorPage />}/>
+        <Route path='/err-cannotmodify' element={<InvalidReq />}/>
         <Route path='*' element={<ErrorPage />}/>
       </Routes>
     </Router>

@@ -6,6 +6,7 @@ import { Dialog, Transition, Switch } from '@headlessui/react'
 
 function Category() {
     //Income ++
+    //Bank +-
     //Expenses --
     //Saving +-
     const [category, setCategory] = useState([])
@@ -16,11 +17,28 @@ function Category() {
     const [modal, setModal] = useState(false);
     const [isOpen, setIsOpen] = useState(true)
     const [enabled, setEnabled] = useState(false)
+    const [start, setStart] = useState(false)
+    const [balance, setBalance] = useState(0);
+
+    const handleStart = async (event) => {
+        event.preventDefault();
+        // Handle form submission (e.g., validation, API call, etc.)
+        if (parseFloat(balance) >= 100) {
+            // Successful submission, close the modal
+            setStart(false);
+        } else {
+            // Handle validation error or display an error message
+            console.log('Please enter a starting bank balance of at least $100');
+        }
+    };
     async function getCategories() {
         await axios.get('http://localhost:9000/category').then(res => { setCategory(res.data) }).catch(e => console.log(e))
     }
     async function getEntries() {
-        await axios.get('http://localhost:9000/transactions').then(res => { setEntry(res.data) }).catch(e => console.log(e))
+        await axios.get('http://localhost:9000/transactions').then(res => {
+            if (!res.data.some(item => item.category === 'bank')) setStart(true);
+            setEntry(res.data)
+        }).catch(e => console.log(e))
     }
     async function getEnable() {
         await axios.get('http://localhost:9000/enable').then(res => { setEnabled(res.data[0]) }).catch(e => console.log(e))
@@ -58,12 +76,15 @@ function Category() {
     };
     const handleSwitch = async () => {
         setEnabled(!enabled)
+        let currDate = new Date()
         await axios.post(`http://localhost:9000/enable`, { enabled: !enabled }).then(res => console.log(res)).catch(e => console.log(e))
+        await axios.post('http://localhost:9000/transactions', [{ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: 'bank', date: currDate, name: 'start', value: parseFloat(balance) }])
+            .then(res => console.log(res.status)).catch(e => console.log(e))
     }
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             {
-                entry.length && enabled ? <div className='py-4'>
+                entry.length || enabled ? <div className='py-4'>
                     <Link
                         to="/transactions"
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
@@ -74,7 +95,36 @@ function Category() {
                     </span>
             }
             {
-                modal &&  
+                start && <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
+                        <h2 className="text-2xl font-bold mb-4">Starting Bank Balance</h2>
+                        <p className="mb-4">To get started, you need a starting bank balance of at least $100.</p>
+                        <form onSubmit={handleStart}>
+                            <div className="mb-4">
+                                <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">
+                                    Balance
+                                </label>
+                                <input
+                                    type="number"
+                                    id="balance"
+                                    name="balance"
+                                    step="0.01"
+                                    min="100"
+                                    value={balance}
+                                    onChange={(e) => setBalance(e.target.value)}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    required
+                                />
+                            </div>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             }
             <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
                 <div className="px-6 py-4">

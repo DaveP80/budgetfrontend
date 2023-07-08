@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 
 function ShowEntry() {
     const { id } = useParams()
-    const navigate = useNavigate()
     const [info, setInfo] = useState(null)
-
+    const navigate = useNavigate()
+    // eslint-disable-next-line
     useEffect(() => { getInfo() }, [])
 
     async function getInfo() {
@@ -17,6 +17,7 @@ function ShowEntry() {
     }
 
     async function handleDelete() {
+        if (info.category ==='bank' && info.name ==='start') navigate('/err-cannotmodify')
         await axios.delete(`http://localhost:9000/transactions/${info.id}`).then(res => console.log(res.status)).catch(e => console.log(e))
         navigate('/transactions')
     }

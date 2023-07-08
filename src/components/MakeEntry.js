@@ -28,10 +28,11 @@ function MakeEntry() {
         let currentDate = new Date();
         let arr = []
         let cpcategory = [...categoryValues]
-        if (categoryValues.every(item => item.name === '')) return
+        //cant make a duplicate bank start entry
+        if (categoryValues.every(item => item.name === '') || categoryValues.some(item => item.category ==='bank' && item.name ==='start')) return
         categoryValues.forEach((item, i) => {
             if (item.name !== '') {
-                arr.push({ id: (Math.floor(Math.random() * 10000) + 10000).toString(), date: currentDate, category: item.category, name: item['name'], value: item['value'] })
+                arr.push({ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: item.category,  date: currentDate, name: item['name'], value: parseFloat(item['value']) })
                 cpcategory[i]['name'] = ''
                 cpcategory[i]['value'] = cpcategory[i]['category'] === 'income' ? 1 : cpcategory[i]['category'] === 'expenses' ? -1 : 0
             }
@@ -72,7 +73,7 @@ function MakeEntry() {
         return categoryValues.map((item, index) => (
             <div key={index} className='mb-4'>
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={item.category}>
-                    {`${item.category}${item.category === 'income' ? ' adding value' : item.category === 'expenses' ? ' subtracting value' : ' tracking amounts'}`}
+                    {`${item.category}${item.category === 'income' ? ' adding value' : item.category === 'expenses' ? ' subtracting value' : item.category ==='bank' ? ' building wealth' : ' tracking amounts'}`}
                 </label>
                 <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -84,6 +85,7 @@ function MakeEntry() {
                 <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="number"
+                    step="0.01"
                     value={item.value}
                     onChange={(event) => handleNumberChange(index, event)}
                     min={item.category === 'income' ? 1 : item.category === 'expenses' ? -Infinity : -Infinity}
