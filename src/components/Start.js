@@ -4,7 +4,7 @@ import { useState, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom';
 import { Dialog, Transition, Switch } from '@headlessui/react'
 
-function Category() {
+function Start() {
     //Income ++
     //Bank +-
     //Expenses --
@@ -76,11 +76,20 @@ function Category() {
         setInput3('');
     };
     const handleSwitch = async () => {
-        setEnabled(!enabled)
         let currDate = new Date()
-        await axios.post(`${process.env.REACT_APP_URL}enable`, { enabled: !enabled }).then(res => console.log(res)).catch(e => console.log(e))
-        await axios.post(`${process.env.REACT_APP_URL}transactions`, [{ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: 'bank', date: currDate, name: 'start', value: parseFloat(balance) }])
-            .then(res => console.log(res.status)).catch(e => console.log(e))
+        if (enabled) {
+            await axios.get(`${process.env.REACT_APP_URL}enable/reset`)
+            await axios.get(`${process.env.REACT_APP_URL}transactions/reset`)
+            await axios.get(`${process.env.REACT_APP_URL}category/reset`)
+            setEnabled(false)
+            setStart(true)
+        } else {
+            await axios.post(`${process.env.REACT_APP_URL}enable`, { enabled: true }).then(res => console.log(res)).catch(e => console.log(e))
+            await axios.post(`${process.env.REACT_APP_URL}transactions`, [{ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: 'bank', date: currDate, name: 'start', value: parseFloat(balance), from: 'start' }])
+                .then(res => console.log(res.status)).catch(e => console.log(e))
+            setEnabled(true)
+            setStart(false)
+        }
     }
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -154,18 +163,18 @@ function Category() {
                     </div>
 
                     <form onSubmit={handleSubmit}>
-                    <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="category"
-                    value={input0}
-                    onChange={(e) => setInput0(e.target.value)}
-                    >
-                    <option value="">select</option>
-                    <option value="utilities">Utilities</option>
-                    <option value="transportation">Transportation</option>
-                    <option value="groceries">Groceries</option>
-                    <option value="investments">Investments</option>
-                    </select>
+                        <select
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="category"
+                            value={input0}
+                            onChange={(e) => setInput0(e.target.value)}
+                        >
+                            <option value="">select</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="groceries">Groceries</option>
+                            <option value="investments">Investments</option>
+                        </select>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="input1">
                                 Input 1
@@ -285,4 +294,4 @@ function Category() {
     )
 }
 
-export default Category
+export default Start

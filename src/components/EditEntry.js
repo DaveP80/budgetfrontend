@@ -7,6 +7,8 @@ import axios from 'axios'
 function EditEntry() {
     const { id } = useParams()
     const [formData, setFormData] = useState(null)
+    const [firstValue, setFirstValue] = useState([])
+    const [err, setShowErr] = useState(false)
     const navigate = useNavigate()
     // eslint-disable-next-line
     useEffect(() => {
@@ -14,11 +16,15 @@ function EditEntry() {
     }, [])
 
     async function getInfo() {
-        await axios.get(`${process.env.REACT_APP_URL}transactions/${id}`).then(res => {
+        await axios.get(`${process.env.REACT_APP_URL}transactions/get`, {
+            params: {
+              id: id
+            }
+          }).then(res => {
             if (res.data.hasOwnProperty('id')) {
                 if (res.data.category === 'bank' && res.data.name === 'start') navigate('/err-cannotmodify');
-                else setFormData(res.data);
-            }
+                else setFormData(res.data); setFirstValue([res.data.name, res.data.value]);
+            } else setShowErr(!err)
         }).catch(e => console.log(e))
     }
 
@@ -32,6 +38,7 @@ function EditEntry() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (formData.name === firstValue[0] && parseFloat(formData.value) === parseFloat(firstValue[1])) return
         if (formData.name === '') return
         updateEntry()
     }
@@ -41,7 +48,7 @@ function EditEntry() {
     }
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            {formData ? <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
+            {formData && <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
                 <h2 className="text-2xl font-bold mb-2">Edit you Entry</h2>
                 <div className="mb-4">
                     <span className="inline-block bg-blue-500 text-white text-sm font-bold py-1 px-2 rounded">
@@ -90,8 +97,8 @@ function EditEntry() {
                         Save
                     </button>
                 </form>
-            </div>
-                :
+            </div>}
+            { err &&
                 <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-4xl w-full">
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Entry not Found in Database</h2>
                     <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 mb-6">

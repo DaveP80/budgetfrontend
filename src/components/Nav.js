@@ -24,7 +24,7 @@ function Nav() {
     }
     return (
 
-        <header className="absolute inset-x-0 top-0 z-50 bg-purple-500">
+        <header className="absolute inset-x-0 top-0 z-50 bg-purple-500 bg-opacity-80">
             <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
                     <span className="sr-only">Budget</span>
@@ -55,7 +55,7 @@ function Nav() {
                     ))}
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <p onClick={() => navigate('/transactions/category')} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
+                    <p onClick={() => navigate('/transactions/start')} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
                         Get Started <span aria-hidden="true">&rarr;</span>
                     </p>
                 </div>
@@ -95,7 +95,7 @@ function Nav() {
                             </div>
                             <div className="py-6">
                                 <p
-                                    onClick={() => navigate('transactions/category')}
+                                    onClick={() => navigate('transactions/start')}
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Get Started

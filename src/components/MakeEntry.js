@@ -9,11 +9,13 @@ function MakeEntry() {
         category,
         name,
         value,
-        Date,}
+        Date,
+        from,}
         */
     const [categoryValues, setCategoryValues] = useState([]);
     const [isClicked, setIsClicked] = useState(false);
     const [enable, setEnabled] = useState(false);
+    const [err, setShowErr] = useState(false);
     const navigate = useNavigate()
 
     const handleClick = () => {
@@ -32,8 +34,9 @@ function MakeEntry() {
         if (categoryValues.every(item => item.name === '') || categoryValues.some(item => item.category === 'bank' && item.name === 'start')) return
         categoryValues.forEach((item, i) => {
             if (item.name !== '') {
-                arr.push({ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: item.category, date: currentDate, name: item['name'], value: parseFloat(item['value']) })
+                arr.push({ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: item.category, date: currentDate, name: item['name'], value: parseFloat(item['value']), from: item['from'] })
                 cpcategory[i]['name'] = ''
+                cpcategory[i]['from'] = ''
                 cpcategory[i]['value'] = cpcategory[i]['category'] === 'income' ? 1 : cpcategory[i]['category'] === 'expenses' ? -1 : 0
             }
         })
@@ -47,11 +50,11 @@ function MakeEntry() {
 
     async function getCategories() {
         await axios.get(`${process.env.REACT_APP_URL}category`).then(res => {
-            setCategoryValues(res.data.map(item => { return { category: item, name: '', value: item === 'income' ? 1 : item === 'expenses' ? -1 : 0 } }))
+            setCategoryValues(res.data.map(item => { return { category: item, name: '', value: item === 'income' ? 1 : item === 'expenses' ? -1 : 0, from: '' } }))
         }).catch(e => console.log(e))
     }
     async function getEnable() {
-        await axios.get(`${process.env.REACT_APP_URL}enable`).then(res => { setEnabled(res.data[0]) }).catch(e => console.log(e))
+        await axios.get(`${process.env.REACT_APP_URL}enable`).then(res => { if (res.data[0] === false) setShowErr(!err); else setEnabled(res.data[0]) }).catch(e => console.log(e))
     }
 
     async function makeEntry(args) {
@@ -61,9 +64,15 @@ function MakeEntry() {
         }).catch(e => console.log(e))
     }
 
-    const handleTextChange = (index, event) => {
+    const handleNameChange = (index, event) => {
         const updatedInformation = [...categoryValues];
         updatedInformation[index].name = event.target.value;
+        setCategoryValues(updatedInformation);
+    };
+
+    const handleFromChange = (index, event) => {
+        const updatedInformation = [...categoryValues];
+        updatedInformation[index].from = event.target.value;
         setCategoryValues(updatedInformation);
     };
 
@@ -76,14 +85,24 @@ function MakeEntry() {
         return categoryValues.map((item, index) => (
             <div key={index} className='mb-4'>
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={item.category}>
-                    {`${item.category}${item.category === 'income' ? ' adding value' : item.category === 'expenses' ? ' subtracting value' : item.category === 'bank' ? ' building wealth' : ' tracking amounts'}`}
+                    {`Category ${item.category}${item.category === 'income' ? ' credit' : item.category === 'expenses' ? ' debit' : item.category === 'bank' ? ' credit/debit' : ' credit/debit'}`}
                 </label>
                 <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder='description'
                     value={item.name}
-                    onChange={(event) => handleTextChange(index, event)}
+                    onChange={(event) => handleNameChange(index, event)}
+                />
+                <label className="block text-gray-700 text-sm font-bold" htmlFor={item.category}>
+                    From
+                </label>
+                <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    placeholder='more detail'
+                    value={item.from}
+                    onChange={(event) => handleFromChange(index, event)}
                 />
                 <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -99,39 +118,41 @@ function MakeEntry() {
     };
 
     return (
-        <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 mt-12'>
-            {enable ?
-                <div className="max-w-md rounded overflow-hidden shadow-lg bg-white">
-                    <div className="px-6 py-4">
-                        <div className="font-bold text-xl mb-4">Submit Transactions Form</div>
-                        <form onSubmit={handleSubmit}>
-                            {renderFields()}
-                            <button
-                                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isClicked ? 'animate-pulse' : ''
-                                    }`}
-                                type="submit"
-                                onClick={handleClick}
-                            >
-                                Submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                : <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
-                    <h2 className="text-2xl font-bold mb-4">Enable First</h2>
-                    <p className="text-gray-700 mb-6">
-                        Your budget and tables are not enabled. Please click the button below to get started.
-                    </p>
-                    <Link
-                        to="/transactions/category"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Enable Your Budget
-                    </Link>
-                </div>
-            }
+        <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 mt-20'>
+        {enable && (
+            <div className="max-w-full sm:max-w-md rounded shadow-lg bg-white">
+            <div className="px-6 py-4">
+                <div className="font-bold text-xl mb-4">Submit Transactions Form</div>
+                <form onSubmit={handleSubmit}>
+                {renderFields()}
+                <button
+                    className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
+                    isClicked ? 'animate-pulse' : ''
+                    }`}
+                    type="submit"
+                    onClick={handleClick}
+                >
+                    Submit
+                </button>
+                </form>
+            </div>
+            </div>
+        )} 
+        {err && (
+            <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
+            <h2 className="text-2xl font-bold mb-4">Enable First</h2>
+            <p className="text-gray-700 mb-6">
+                Your budget and tables are not enabled. Please click the button below to get started.
+            </p>
+            <Link
+                to="/transactions/start"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+                Enable Your Budget
+            </Link>
+            </div>
+        )}
         </div>
-
     );
 };
 

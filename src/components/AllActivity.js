@@ -8,29 +8,33 @@ import { useNavigate } from 'react-router-dom'
 function AllActivity() {
     const [table, setTable] = useState([])
     const [btotal, setTotal] = useState(0)
+    const [err, setShowErr] = useState(false)
     const navigate = useNavigate()
     useEffect(() => {
         getTableInfo()
     }, [])
 
     async function getTableInfo() {
-        await axios.get(`${process.env.REACT_APP_URL}transactions`).then(res => { 
-        setTotal(res.data.reduce((accumulator, item) => {
-            if (item.category === 'bank') {
-            return accumulator + parseFloat(item.value);
-            }
-            return accumulator;
-        }, 0).toFixed(2))
-        setTable(res.data)}).catch(e => console.log(e))
+        await axios.get(`${process.env.REACT_APP_URL}transactions`).then(res => {
+            if (res.data.length) {
+                setTotal(res.data.reduce((accumulator, item) => {
+                    if (item.category === 'bank') {
+                        return accumulator + parseFloat(item.value);
+                    }
+                    return accumulator;
+                }, 0).toFixed(2));
+                setTable(res.data);
+            } else setShowErr(!err);
+        }).catch(e => console.log(e));
     }
     return (<div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-        {table.length ? (
+        {table.length > 0 && (
             <div className="bg-white shadow-xl rounded-lg p-6 max-w-4xl w-full overflow-x-auto">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Table of transactions</h2>
                 <table className="w-full">
                     <thead>
                         <tr className="bg-gray-200">
-                            {Object.keys(table[0]).map((key, i) => (
+                            {Object.keys(table[0]).slice(0, -1).map((key, i) => (
                                 <th className="py-2 px-4 font-bold" key={i}>
                                     {key}
                                 </th>
@@ -40,8 +44,8 @@ function AllActivity() {
                     <tbody>
                         {table.map((item) => (
                             <tr key={item.id}>
-                                {Object.values(item).map((value, index) => (
-                                    <td className={`py-2 px-4${index === 0 ? ' cursor-pointer' : ''}`} key={index} onClick={() => {if (index===0) navigate(`/transactions/${item.id}`)}}>
+                                {Object.values(item).slice(0, -1).map((value, index) => (
+                                    <td className={`py-2 px-4${index === 0 ? ' cursor-pointer' : ''}`} key={index} onClick={() => { if (index === 0) navigate(`/transactions/${item.id}`) }}>
                                         {index === 2 && value.includes('T') ? value.split("T")[0] : value}
                                     </td>
                                 ))}
@@ -53,42 +57,43 @@ function AllActivity() {
                 <table className="w-full">
                     <thead>
                         <tr className="bg-gray-200">
-               
-                                <th className="py-2 px-4 font-bold" key={generateId()}>
-                                    Bank Total
-                                </th>
-                                <th className="py-2 px-4 font-bold" key={generateId()}>
-                                    Income & Bank Total
-                                </th>
-                                <th className="py-2 px-4 font-bold" key={generateId()}>
-                                    All transactions
-                                </th>
+
+                            <th className="py-2 px-4 font-bold" key={generateId()}>
+                                Bank Total
+                            </th>
+                            <th className="py-2 px-4 font-bold" key={generateId()}>
+                                Income & Bank Total
+                            </th>
+                            <th className="py-2 px-4 font-bold" key={generateId()}>
+                                All transactions
+                            </th>
 
                         </tr>
                     </thead>
                     <tbody>
-                            <tr key={generateId()}>
-                                    <td className={`py-2 px-4 ${btotal > 100 ? "text-green-500" : btotal > -1 && btotal < 101 ? "text-yellow-500" : "text-red-500"}`} key={'a'}>
-                                        {btotal}
-                                    </td>
-                                    <td className="py-2 px-4" key={'b'}>
-                                        {table.reduce((accumulator, item) => {
-                                            if (item.category === 'bank' || item.category === 'income') {
-                                                return accumulator + parseFloat(item.value)
-                                            }
-                                            return accumulator;
-                                            }, 0).toFixed(2)}
-                                    </td>
-                                    <td className="py-2 px-4" key={'c'}>
-                                        {(table.reduce((accumulator, item) => {
-                                            return accumulator + parseFloat(item.value);;
-                                        }, 0)).toFixed(2)}
-                                    </td>
-                            </tr>
+                        <tr key={generateId()}>
+                            <td className={`py-2 px-4 ${btotal > 100 ? "text-green-500" : btotal > -1 && btotal < 101 ? "text-yellow-500" : "text-red-500"}`} key={'a'}>
+                                {btotal}
+                            </td>
+                            <td className="py-2 px-4" key={'b'}>
+                                {table.reduce((accumulator, item) => {
+                                    if (item.category === 'bank' || item.category === 'income') {
+                                        return accumulator + parseFloat(item.value)
+                                    }
+                                    return accumulator;
+                                }, 0).toFixed(2)}
+                            </td>
+                            <td className="py-2 px-4" key={'c'}>
+                                {(table.reduce((accumulator, item) => {
+                                    return accumulator + parseFloat(item.value);;
+                                }, 0)).toFixed(2)}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        ) : (
+        )}
+        {err && (
             <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-4xl w-full">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Need transaction data</h2>
                 <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 mb-6">
