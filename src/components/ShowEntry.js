@@ -12,13 +12,13 @@ function ShowEntry() {
     useEffect(() => { getInfo() }, [])
 
     async function getInfo() {
-        await axios.get(`http://localhost:9000/transactions/${id}`).then(res => {if (!res.data.hasOwnProperty('id')) navigate('/notfound');
+        await axios.get(`${process.env.REACT_APP_URL}transactions/${id}`).then(res => {if (!res.data.hasOwnProperty('id')) navigate('/notfound');
         setInfo({ ...res.data })}).catch(e => console.log(e))
     }
 
     async function handleDelete() {
         if (info.category ==='bank' && info.name ==='start') navigate('/err-cannotmodify')
-        await axios.delete(`http://localhost:9000/transactions/${info.id}`).then(res => console.log(res.status)).catch(e => console.log(e))
+        await axios.delete(`${process.env.REACT_APP_URL}transactions/${info.id}`).then(res => console.log(res.status)).catch(e => console.log(e))
         navigate('/transactions')
     }
     return (

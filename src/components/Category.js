@@ -33,16 +33,16 @@ function Category() {
         }
     };
     async function getCategories() {
-        await axios.get('http://localhost:9000/category').then(res => { setCategory(res.data) }).catch(e => console.log(e))
+        await axios.get(`${process.env.REACT_APP_URL}category`).then(res => { setCategory(res.data) }).catch(e => console.log(e))
     }
     async function getEntries() {
-        await axios.get('http://localhost:9000/transactions').then(res => {
+        await axios.get(`${process.env.REACT_APP_URL}transactions`).then(res => {
             if (!res.data.some(item => item.category === 'bank')) setStart(true);
             setEntry(res.data)
         }).catch(e => console.log(e))
     }
     async function getEnable() {
-        await axios.get('http://localhost:9000/enable').then(res => { setEnabled(res.data[0]) }).catch(e => console.log(e))
+        await axios.get(`${process.env.REACT_APP_URL}enable`).then(res => { setEnabled(res.data[0]) }).catch(e => console.log(e))
     }
     useEffect(() => {
         getEntries()
@@ -66,7 +66,7 @@ function Category() {
         }
         let newcategories = forminfo.filter(item => item !== '')
         if (newcategories.length) {
-            await axios.post(`http://localhost:9000/category`, { category: newcategories }).then(res => {
+            await axios.post(`${process.env.REACT_APP_URL}category`, { category: newcategories }).then(res => {
                 setModal(true)
             }).catch(e => console.log(e))
             setCategory([...category, ...newcategories])
@@ -78,8 +78,8 @@ function Category() {
     const handleSwitch = async () => {
         setEnabled(!enabled)
         let currDate = new Date()
-        await axios.post(`http://localhost:9000/enable`, { enabled: !enabled }).then(res => console.log(res)).catch(e => console.log(e))
-        await axios.post('http://localhost:9000/transactions', [{ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: 'bank', date: currDate, name: 'start', value: parseFloat(balance) }])
+        await axios.post(`${process.env.REACT_APP_URL}enable`, { enabled: !enabled }).then(res => console.log(res)).catch(e => console.log(e))
+        await axios.post(`${process.env.REACT_APP_URL}transactions`, [{ id: (Math.floor(Math.random() * 10000) + 10000).toString(), category: 'bank', date: currDate, name: 'start', value: parseFloat(balance) }])
             .then(res => console.log(res.status)).catch(e => console.log(e))
     }
     return (

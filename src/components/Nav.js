@@ -18,9 +18,9 @@ function Nav() {
     }, [location])
 
     async function getBalance() {
-        await axios.get('http://localhost:9000/transactions').then(res => setBalance((res.data.reduce((accumulator, item) => {
+        await axios.get(`${process.env.REACT_APP_URL}transactions`).then(res => { if (res.data.length) setBalance((res.data.reduce((accumulator, item) => {
             return accumulator + parseFloat(item.value);;
-        }, 0)).toFixed(2)))
+        }, 0)).toFixed(2));}).catch(e => console.log(e))
     }
     return (
 
@@ -55,7 +55,7 @@ function Nav() {
                     ))}
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <p onClick={() => navigate('transactions/category')} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
+                    <p onClick={() => navigate('/transactions/category')} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
                         Get Started <span aria-hidden="true">&rarr;</span>
                     </p>
                 </div>

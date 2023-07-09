@@ -14,7 +14,7 @@ function EditEntry() {
     }, [])
 
     async function getInfo() {
-        await axios.get(`http://localhost:9000/transactions/${id}`).then(res => {
+        await axios.get(`${process.env.REACT_APP_URL}transactions/${id}`).then(res => {
             if (res.data.hasOwnProperty('id')) {
                 if (res.data.category === 'bank' && res.data.name === 'start') navigate('/err-cannotmodify');
                 else setFormData(res.data);
@@ -23,7 +23,7 @@ function EditEntry() {
     }
 
     async function updateEntry() {
-        await axios.put(`http://localhost:9000/transactions/${id}`, {
+        await axios.put(`${process.env.REACT_APP_URL}transactions/${id}`, {
             id: formData.id, category: formData.category, date: formData.date,
             name: formData.name, value: parseFloat(formData.value)
         }).then(res => { if (res.data.some(item => item.id === id)) navigate(`/transactions/${id}`) })
