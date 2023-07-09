@@ -1,14 +1,27 @@
 import React from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { navLinks } from '../constants';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { piggy } from '../assets'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import axios from 'axios';
 
 function Nav() {
     const navigate = useNavigate();
+    const location = useLocation()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [balance, setBalance] = useState(0)
+    // eslint-disable-next-line
+    useEffect(() => {
+        getBalance()
+    }, [location])
+
+    async function getBalance() {
+        await axios.get('http://localhost:9000/transactions').then(res => setBalance((res.data.reduce((accumulator, item) => {
+            return accumulator + parseFloat(item.value);;
+        }, 0)).toFixed(2)))
+    }
     return (
 
         <header className="absolute inset-x-0 top-0 z-50 bg-purple-500">
@@ -21,6 +34,9 @@ function Nav() {
                         alt="pig"
                     />
                 </div>
+                <h2 className="bg-green-200 text-green-800 rounded-full px-3 py-1">
+                    {balance}
+                </h2>
                 <div className="flex lg:hidden">
                     <button
                         type="button"
@@ -31,7 +47,7 @@ function Nav() {
                         <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                     </button>
                 </div>
-                <div className="hidden lg:flex lg:gap-x-12">
+                <div className="hidden px-5 lg:flex lg:gap-x-12">
                     {navLinks.map((item) => (
                         <p key={item.id} onClick={() => navigate(item.id)} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
                             {item.title}

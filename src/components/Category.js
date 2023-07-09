@@ -11,6 +11,7 @@ function Category() {
     //Saving +-
     const [category, setCategory] = useState([])
     const [entry, setEntry] = useState([])
+    const [input0, setInput0] = useState('')
     const [input1, setInput1] = useState('');
     const [input2, setInput2] = useState('');
     const [input3, setInput3] = useState('');
@@ -57,7 +58,7 @@ function Category() {
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
-        let forminfo = Array.from([input1.toLowerCase(), input2.toLowerCase(), input3.toLowerCase()])
+        let forminfo = Array.from([input0, input1.toLowerCase(), input2.toLowerCase(), input3.toLowerCase()])
         if (forminfo.every(item => item === '')) return
         if (forminfo.some(item => category.includes(item))) {
             alert('duplicate category')
@@ -136,7 +137,7 @@ function Category() {
                     </ul>
                     <i>add new categories</i>
                     <div>
-                        <h2>{enabled ? 'Your account is active' : 'Start Account'}</h2>
+                        <h2>{enabled ? 'Your account is ' : 'Start Account'}<span className='text-green-800'>{enabled ? 'active' : ''}</span></h2>
                         <Switch
                             checked={enabled}
                             onChange={handleSwitch}
@@ -153,6 +154,18 @@ function Category() {
                     </div>
 
                     <form onSubmit={handleSubmit}>
+                    <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="category"
+                    value={input0}
+                    onChange={(e) => setInput0(e.target.value)}
+                    >
+                    <option value="">select</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="transportation">Transportation</option>
+                    <option value="groceries">Groceries</option>
+                    <option value="investments">Investments</option>
+                    </select>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="input1">
                                 Input 1

@@ -3,22 +3,24 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { v1 as generateId } from 'uuid'
+import { useNavigate } from 'react-router-dom'
 
 function AllActivity() {
     const [table, setTable] = useState([])
     const [btotal, setTotal] = useState(0)
+    const navigate = useNavigate()
     useEffect(() => {
         getTableInfo()
     }, [])
 
     async function getTableInfo() {
-        await axios.get('http://localhost:9000/transactions').then(res => { 
+        await axios.get(`${process.env.REACT_APP_URL}transactions`).then(res => { 
         setTotal(res.data.reduce((accumulator, item) => {
             if (item.category === 'bank') {
             return accumulator + parseFloat(item.value);
             }
             return accumulator;
-        }, 0))
+        }, 0).toFixed(2))
         setTable(res.data)}).catch(e => console.log(e))
     }
     return (<div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
@@ -39,7 +41,7 @@ function AllActivity() {
                         {table.map((item) => (
                             <tr key={item.id}>
                                 {Object.values(item).map((value, index) => (
-                                    <td className="py-2 px-4" key={index}>
+                                    <td className={`py-2 px-4${index === 0 ? ' cursor-pointer' : ''}`} key={index} onClick={() => {if (index===0) navigate(`/transactions/${item.id}`)}}>
                                         {index === 2 && value.includes('T') ? value.split("T")[0] : value}
                                     </td>
                                 ))}
@@ -75,7 +77,7 @@ function AllActivity() {
                                                 return accumulator + parseFloat(item.value)
                                             }
                                             return accumulator;
-                                            }, 0)}
+                                            }, 0).toFixed(2)}
                                     </td>
                                     <td className="py-2 px-4" key={'c'}>
                                         {(table.reduce((accumulator, item) => {

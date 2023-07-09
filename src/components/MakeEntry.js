@@ -55,7 +55,8 @@ function MakeEntry() {
     }
 
     async function makeEntry(args) {
-        await axios.post('http://localhost:9000/transactions', args).then(res => { navigate(`/transactions/${+res.data[res.data.length - 1]['id']}`) }).catch(e => console.log(e))
+        await axios.post('http://localhost:9000/transactions', args).then(res => { if (res.status === 201) navigate(`/transactions/${+res.data[res.data.length - 1]['id']}`);
+        else navigate('/transactions/new') }).catch(e => console.log(e))
     }
 
     const handleTextChange = (index, event) => {
@@ -96,7 +97,7 @@ function MakeEntry() {
     };
 
     return (
-        <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+        <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 mt-12'>
             {enable ?
                 <div className="max-w-md rounded overflow-hidden shadow-lg bg-white">
                     <div className="px-6 py-4">

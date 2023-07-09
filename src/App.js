@@ -11,9 +11,8 @@ import InvalidReq from './components/InvalidReq';
 
 function App() {
   return (
-
       <Router>
-      <Nav/>
+      <Nav />
       <Routes>
         <Route path='/home' element={<Home />}/>
         <Route path='/transactions' element={<AllActivity />}/>
@@ -26,8 +25,6 @@ function App() {
         <Route path='*' element={<ErrorPage />}/>
       </Routes>
     </Router>
-
-
   );
 }
 

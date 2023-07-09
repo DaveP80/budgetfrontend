@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Home() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center text-center min-h-screen bg-gray-100">
             <h1 className="text-4xl font-bold mb-8">Welcome to Money Budget Site</h1>
             <div className="flex flex-col items-center space-y-4">
                 <Link
