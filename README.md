@@ -39,32 +39,4 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<div id='davidpaquette'><h1>Budget App</h1><p>This is a budget tracking application built with React. It allows users to manage their financial transactions by adding new entries, editing existing transactions, and viewing a table of all transactions.</p><h2>Paths</h2><p>The application provides the following paths:</p><ul><li><code>/transactions/start</code>: Starts a session by setting the initial bank balance.</li><li><code>/transactions</code>: Displays a table of all transactions.</li><li><code>/transactions/:id</code>: Shows details of a specific transaction.</li><li><code>/transactions/new</code>: Allows users to create new transaction entries.</li><li><code>/transactions/:id/edit</code>: Allows users to edit an existing transaction.</li></ul><h2>API</h2><p>The application interacts with a backend API to perform CRUD (Create, Read, Update, Delete) operations on the transactions. The API URL is <code>https://budgetserver-lvjq.onrender.com/</code>. All the necessary data for the application's functionality is obtained from this API.</p><h2>Getting Started</h2><p>To run the budget app locally, follow these steps:</p><ol><li>Clone the repository: <code>git clone &lt;repository-url&gt;</code></li><li>Install dependencies: <code>npm install</code></li><li>Start the development server: <code>npm start</code></li><li>Access the app in your browser at <code>http://localhost:3000</code></li></ol><p>Make sure to have Node.js and npm installed on your machine.</p><h2>Dependencies</h2><p>The project uses the following dependencies:</p><ul><li>React</li><li>React Router</li><li>Axios</li></ul><p>These dependencies are managed by npm and will be installed automatically when running <code>npm install</code>.</p><h2>Contributing</h2><p>Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.</p><h2>License</h2><p>This project is licensed under the <a href="LICENSE" target="_new">MIT License</a>.</p></div>

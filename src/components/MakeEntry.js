@@ -7,10 +7,10 @@ function MakeEntry() {
     /*
     { id,
         category,
+        date,
         name,
         value,
-        Date,
-        from,}
+      from,}
         */
     const [categoryValues, setCategoryValues] = useState([]);
     const [isClicked, setIsClicked] = useState(false);
