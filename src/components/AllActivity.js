@@ -27,7 +27,7 @@ function AllActivity() {
             } else setShowErr(!err);
         }).catch(e => console.log(e));
     }
-    return (<div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+    return (<div className='flex items-center justify-center min-h-screen bg-gray-100'>
         {table.length > 0 && (
             <div className="bg-white shadow-xl rounded-lg p-6 max-w-4xl w-full overflow-x-auto">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Table of transactions</h2>

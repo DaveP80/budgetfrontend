@@ -3,6 +3,7 @@ import React from 'react'
 import { useState, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom';
 import { Dialog, Transition, Switch } from '@headlessui/react'
+import '../index.css'
 
 function Start() {
     //Income ++
@@ -92,7 +93,8 @@ function Start() {
         }
     }
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="pdding flex flex-col md:inset-x-0 top-1/4 items-center justify-center min-h-screen bg-gray-100">
+
             {
                 entry.length || enabled ? <div className='py-4'>
                     <Link
@@ -105,7 +107,7 @@ function Start() {
                     </span>
             }
             {
-                start && <div className="fixed inset-0 flex items-center justify-center z-50">
+                start && <div className="fixed flex inset-0 items-center justify-center z-50">
                     <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
                         <h2 className="text-2xl font-bold mb-4">Starting Bank Balance</h2>
                         <p className="mb-4">To get started, you need a starting bank balance of at least $100.</p>

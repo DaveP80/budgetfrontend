@@ -49,7 +49,7 @@ function EditEntry() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             {formData && <div className="bg-white shadow-xl rounded-lg p-6 mx-auto max-w-lg">
-                <h2 className="text-2xl font-bold mb-2">Edit you Entry</h2>
+                <h2 className="text-2xl font-bold mb-2">Edit your Entry</h2>
                 <div className="mb-4">
                     <span className="inline-block bg-blue-500 text-white text-sm font-bold py-1 px-2 rounded">
                         For ID: {formData.id}
