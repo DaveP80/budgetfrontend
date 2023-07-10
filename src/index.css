@@ -21,6 +21,6 @@ code {
 }
 @media (max-width: 500px) {
   .customtsize {
-    font-size: 1rem; /* Adjust the font size to your preference */
+    font-size: 1rem;
   }
 }
