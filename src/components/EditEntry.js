@@ -31,7 +31,7 @@ function EditEntry() {
     async function updateEntry() {
         await axios.put(`${process.env.REACT_APP_URL}transactions/${id}`, {
             id: formData.id, category: formData.category, date: formData.date,
-            name: formData.name, value: parseFloat(formData.value)
+            name: formData.name, value: parseFloat(formData.value), from: formData.from
         }).then(res => { if (res.data.some(item => item.id === id)) navigate(`/transactions/${id}`) })
             .catch(e => navigate('/notfound'))
     }
