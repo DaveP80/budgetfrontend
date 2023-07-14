@@ -31,21 +31,21 @@ function AllActivity() {
         {table.length > 0 && (
             <div className="bg-white shadow-xl rounded-lg p-6 max-w-4xl w-full overflow-x-auto">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Table of transactions</h2>
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-gray-200">
+                <table className="min-w-full divide-y">
+                    <thead className='bg-gray-200'>
+                        <tr>
                             {Object.keys(table[0]).slice(0, -1).map((key, i) => (
-                                <th className="py-2 px-4 font-bold" key={i}>
+                                <th className="px-6 py-3 font-bold text-left text-black-500 uppercase" key={i}>
                                     {key}
                                 </th>
                             ))}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='divide-y'>
                         {table.map((item) => (
-                            <tr key={item.id}>
+                            <tr key={item.id} className=''>
                                 {Object.values(item).slice(0, -1).map((value, index) => (
-                                    <td className={`py-2 px-4${index === 0 ? ' cursor-pointer' : ''}`} key={index} onClick={() => { if (index === 0) navigate(`/transactions/${item.id}`) }}>
+                                    <td className={`px-6 py-4 text-md font-medium text-gray-800 whitespace-nowrap${index === 0 ? ' cursor-pointer' : ''}`} key={index} onClick={() => { if (index === 0) navigate(`/transactions/${item.id}`) }}>
                                         {index === 2 && value.includes('T') ? value.split("T")[0] : value}
                                     </td>
                                 ))}
@@ -53,29 +53,29 @@ function AllActivity() {
                         ))}
                     </tbody>
                 </table>
-                <h2 className="text-2xl sm:text-2xl lg:text-3xl font-bold mb-4">Money Totals</h2>
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-gray-200">
+                <h2 className="text-xl sm:text-xl lg:text-2xl font-bold mb-4">Money Totals</h2>
+                <table className="min-w-full divide-y">
+                    <thead className='bg-gray-200'>
+                        <tr>
 
-                            <th className="py-2 px-4 font-bold" key={generateId()}>
+                            <th className="px-6 py-3 font-bold text-left text-black-500 uppercase" key={generateId()}>
                                 Bank Total
                             </th>
-                            <th className="py-2 px-4 font-bold" key={generateId()}>
+                            <th className="px-6 py-3 font-bold text-left text-black-500 uppercase" key={generateId()}>
                                 Income & Bank Total
                             </th>
-                            <th className="py-2 px-4 font-bold" key={generateId()}>
+                            <th className="px-6 py-3 font-bold text-left text-black-500 uppercase" key={generateId()}>
                                 All transactions
                             </th>
 
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='divide-y'>
                         <tr key={generateId()}>
-                            <td className={`py-2 px-4 ${btotal > 100 ? "text-green-500" : btotal > -1 && btotal < 101 ? "text-yellow-500" : "text-red-500"}`} key={'a'}>
+                            <td className={`px-6 py-4 text-sm font-medium whitespace-nowrap ${btotal > 100 ? "text-green-500" : btotal > -1 && btotal < 101 ? "text-yellow-500" : "text-red-500"}`} key={'a'}>
                                 {btotal}
                             </td>
-                            <td className="py-2 px-4" key={'b'}>
+                            <td className="px-6 py-4 text-md font-medium text-gray-800 whitespace-nowrap" key={'b'}>
                                 {table.reduce((accumulator, item) => {
                                     if (item.category === 'bank' || item.category === 'income') {
                                         return accumulator + parseFloat(item.value)
@@ -83,7 +83,7 @@ function AllActivity() {
                                     return accumulator;
                                 }, 0).toFixed(2)}
                             </td>
-                            <td className="py-2 px-4" key={'c'}>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap" key={'c'}>
                                 {(table.reduce((accumulator, item) => {
                                     return accumulator + parseFloat(item.value);;
                                 }, 0)).toFixed(2)}
